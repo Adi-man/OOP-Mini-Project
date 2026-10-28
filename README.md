@@ -1,1 +1,13 @@
 # OOP-Mini-Project
+
+Here is exactly how C++ is utilized in the system:1. Core Object-Oriented Programming (OOP) Implementation
+The C++ backend fulfills the primary academic requirement of the mini-project by demonstrating fundamental OOP principles:   Classes & Objects: The domain is modeled using distinct classes like User and HealthcareSystem.   Encapsulation: Sensitive data, such as a user's staffId and passwordHash, are kept strictly private inside the User class. They cannot be accessed directly by other parts of the program; they can only be verified through the public verify() method.Constructors: Used to initialize User objects with their credentials and specific roles (Administrator, Doctor, Receptionist) when the system boots up.   Abstraction: The frontend Javascript doesn't need to know how to verify a user or manage roles; it simply sends a request to the C++ server, which abstracts all the complex logic and returns a simple "Success" or "Denied".2. Server-Side Role-Based Access Control (RBAC)
+In a secure system, you cannot trust the browser to enforce permissions. The C++ code uses an enum class Role to rigidly define staff privileges. When a login request hits the server, C++ evaluates the credentials, assigns the correct enum role to the session, and dictates exactly what that user is allowed to do before sending the authorization back to the UI.   3. Password Transformation & Security
+Rather than storing plain-text passwords, the C++ User class utilizes std::hash to transform the passwords into fixed-size cryptographic hashes during object creation. When a user attempts to log in, the incoming password is hashed by the C++ backend and compared against the stored hash.4. Immutable Audit Logging
+The C++ server maintains an independent console log of all critical security events (like authentication attempts). Because this log is generated and printed directly by the C++ backend executable, it is immune to manipulation from the client-side browser, mimicking the foundational requirements of forensic event logging.5. The HTTP Bridge (cpp-httplib)
+C++ is used to instantiate the httplib::Server, which continuously listens on port 8080. It utilizes Lambda Functions ([&](const httplib::Request& req, httplib::Response& res)) to capture incoming POST requests from the Javascript fetch() calls, extracts the form data, passes it through the OOP security model, and dynamically constructs JSON responses to send back to the web interface.
+
+# HOW TO RUN
+g++ -std=c++17 main.cpp -o medishield_server.exe -lws2_32 -D_WIN32_WINNT=0x0A00 run in terminal
+
+then run medishield_server.exe
